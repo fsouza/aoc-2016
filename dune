@@ -1,0 +1,9 @@
+(library
+ (name aoc)
+ (libraries core)
+ (modules Aoc))
+
+(executable
+ (name new_day)
+ (libraries core)
+ (modules New_day))
