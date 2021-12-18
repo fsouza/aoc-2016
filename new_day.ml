@@ -4,7 +4,7 @@ let dune_file_content day_number =
   Printf.sprintf
     {|(executable
  (name day%d)
- (libraries aoc core)
+ (libraries core)
  (modules Day%d))
 |}
     day_number day_number
