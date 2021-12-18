@@ -1,6 +1,6 @@
 (executable
  (name day1)
- (libraries aoc core)
+ (libraries core)
  (preprocess
   (pps ppx_sexp_conv))
  (modules Day1))
