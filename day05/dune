@@ -1,0 +1,4 @@
+(executable
+ (name day5)
+ (libraries core)
+ (modules Day5))
