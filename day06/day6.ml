@@ -44,9 +44,9 @@ let find_ecm_min_freq freqs =
     |> Array.map
          ~f:
            (Hashtbl.fold ~init:('\x00', Int.max_value)
-              ~f:(fun ~key ~data (most_common, most_common_amount) ->
-                if data < most_common_amount then (key, data)
-                else (most_common, most_common_amount)))
+              ~f:(fun ~key ~data (least_common, least_common_amount) ->
+                if data < least_common_amount then (key, data)
+                else (least_common, least_common_amount)))
   in
   ecm |> Array.to_list |> List.map ~f:fst |> String.of_char_list
 
