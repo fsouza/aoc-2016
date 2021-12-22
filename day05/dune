@@ -1,4 +1,9 @@
 (executable
- (name day5)
+ (name part1)
  (libraries core)
- (modules Day5))
+ (modules Part1))
+
+(executable
+ (name part2)
+ (libraries core)
+ (modules Part2))
