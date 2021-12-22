@@ -9,7 +9,7 @@ let string_iteri ~f str =
   in
   aux 0
 
-let find_ecm lines =
+let make_freqs lines =
   let freqs =
     match lines with
     | [] -> [||]
@@ -24,6 +24,9 @@ let find_ecm lines =
                   Hashtbl.find freqs.(i) ch |> Option.value ~default:0
                 in
                 Hashtbl.set ~key:ch ~data:(curr + 1) freqs.(i)));
+  freqs
+
+let find_ecm_max_freq freqs =
   let ecm =
     freqs
     |> Array.map
@@ -35,5 +38,20 @@ let find_ecm lines =
   in
   ecm |> Array.to_list |> List.map ~f:fst |> String.of_char_list
 
+let find_ecm_min_freq freqs =
+  let ecm =
+    freqs
+    |> Array.map
+         ~f:
+           (Hashtbl.fold ~init:('\x00', Int.max_value)
+              ~f:(fun ~key ~data (most_common, most_common_amount) ->
+                if data < most_common_amount then (key, data)
+                else (most_common, most_common_amount)))
+  in
+  ecm |> Array.to_list |> List.map ~f:fst |> String.of_char_list
+
 let () =
-  In_channel.stdin |> In_channel.input_lines |> find_ecm |> Printf.printf "%s\n"
+  let lines = In_channel.stdin |> In_channel.input_lines in
+  let freqs = make_freqs lines in
+  Printf.printf "Part 1: %s\n" @@ find_ecm_max_freq freqs;
+  Printf.printf "Part 2: %s\n" @@ find_ecm_min_freq freqs
