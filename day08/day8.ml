@@ -52,16 +52,16 @@ let add_positions s (cols, rows) =
 let shift_down s col amount =
   let height = 6 in
   s
-  |> PosSet.filter_map ~f:(fun (x, y) ->
+  |> PosSet.map ~f:(fun (x, y) ->
          let y = if x = col then y + amount else y in
-         Option.some_if (y < height) (x, y))
+         (x, y mod height))
 
 let shift_right s row amount =
   let width = 50 in
   s
-  |> PosSet.filter_map ~f:(fun (x, y) ->
+  |> PosSet.map ~f:(fun (x, y) ->
          let x = if y = row then x + amount else x in
-         Option.some_if (x < width) (x, y))
+         (x mod width, y))
 
 let execute s = function
   | Rect (cols, rows) -> add_positions s (cols, rows)
