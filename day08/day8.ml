@@ -68,10 +68,28 @@ let execute s = function
   | Shift_down (Col col, amount) -> shift_down s col amount
   | Shift_right (Row row, amount) -> shift_right s row amount
 
+let print_grid grid =
+  let width = 50 in
+  let height = 6 in
+  let rec print' x y =
+    if y = height then ()
+    else if x = width then (
+      Out_channel.newline stdout;
+      print' 0 (y + 1))
+    else
+      let ch = if PosSet.mem grid (x, y) then '#' else '.' in
+      Out_channel.output_char stdout ch;
+      print' (x + 1) y
+  in
+  print' 0 0
+
 let () =
-  In_channel.stdin
-  |> In_channel.input_lines
-  |> List.filter_map ~f:parse
-  |> List.fold_left ~init:PosSet.empty ~f:execute
-  |> PosSet.length
-  |> Printf.printf "%d\n"
+  let grid =
+    In_channel.stdin
+    |> In_channel.input_lines
+    |> List.filter_map ~f:parse
+    |> List.fold_left ~init:PosSet.empty ~f:execute
+  in
+  grid |> PosSet.length |> Printf.printf "Part 1: %d\n";
+  Printf.printf "Part 2:\n";
+  print_grid grid
