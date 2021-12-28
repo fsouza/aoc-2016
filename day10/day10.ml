@@ -120,12 +120,16 @@ let find_value low high m =
   |> Option.map ~f:fst
 
 let () =
-  In_channel.stdin
-  |> In_channel.input_lines
-  |> List.filter_map ~f:parse
-  |> List.fold_left ~init:(IntMap.empty, IntMap.empty) ~f:process_bot
-  |> build_resolution_list
-  |> fst
-  |> resolve
-  |> find_value 17 61
-  |> Option.iter ~f:(Printf.printf "%d\n")
+  let values =
+    In_channel.stdin
+    |> In_channel.input_lines
+    |> List.filter_map ~f:parse
+    |> List.fold_left ~init:(IntMap.empty, IntMap.empty) ~f:process_bot
+    |> build_resolution_list
+    |> fst
+    |> resolve
+  in
+  values |> find_value 17 61 |> Option.iter ~f:(Printf.printf "%d\n");
+  values
+  |> IntMap.iteri ~f:(fun ~key ~data:(left, right) ->
+         Printf.printf "Bot %d: (%d, %d)\n" key left right)
