@@ -44,19 +44,7 @@ let parse line =
   | _ -> None
 
 type dependency = Low_dep of bot_id | High_dep of bot_id
-
-let string_of_dep = function
-  | Low_dep bot_id -> Printf.sprintf "Low_dep %d" bot_id
-  | High_dep bot_id -> Printf.sprintf "High_dep %d" bot_id
-
 type value = Resolved of int | Unresolved of dependency
-
-let string_of_value = function
-  | Resolved v -> Printf.sprintf "Resolved %d" v
-  | Unresolved (Low_dep bot_id) ->
-      Printf.sprintf "Unresolved (Low_dep %d)" bot_id
-  | Unresolved (High_dep bot_id) ->
-      Printf.sprintf "Unresolved (High_dep %d)" bot_id
 
 let add_value ~bot_id ~value values =
   let curr = IntMap.find values bot_id |> Option.value ~default:[] in
@@ -83,15 +71,6 @@ let process_bot (graph, values) = function
         values |> add_value ~bot_id:bot_high ~value:(Unresolved (High_dep bot))
       )
   | Give _ -> (graph, values)
-
-type chip = V of int | Ref of bot_id
-
-let string_of_chip = function
-  | V v -> Printf.sprintf "V %d" v
-  | Ref bot_id -> Printf.sprintf "Ref %d" bot_id
-
-let chip_of_dependency = function
-  | Low_dep bot_id | High_dep bot_id -> Ref bot_id
 
 type robot = { id : bot_id; values : value list }
 
